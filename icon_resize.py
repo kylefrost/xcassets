@@ -1,3 +1,4 @@
+import os
 from PIL import Image
 
 # Set Constants for icon sizes
@@ -32,4 +33,19 @@ kAppleWatchShortLookIcon38mm = 172
 kAppleWatchShortLookIcon42mm = 196
 
 def resizeIconImages(imagename):
+    resized_images_path = "resized_image_folders/" + imagename
+    os.makedirs(resized_images_path)
 
+def createiPhoneIcons(name):
+    sizes = [kiPhoneSettingsIcon2x, 
+             kiPhoneSettingsIcon3x,
+             kiPhoneSpotlightIcon2x,
+             kiPhoneSpotlightIcon3x,
+             kiPhoneAppIcon2x,
+             kiPhoneAppIcon3x]
+  
+def createiPadIcons(name):
+  
+def createCarPlayIcons(name):
+  
+def createAppleWatchIcons(name):
