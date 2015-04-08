@@ -1,4 +1,4 @@
-import os
+import os, time
 from PIL import Image
 
 # Set Constants for icon sizes
@@ -32,20 +32,75 @@ kAppleWatchLongLookIcon42mm = 88
 kAppleWatchShortLookIcon38mm = 172
 kAppleWatchShortLookIcon42mm = 196
 
-def resizeIconImages(imagename):
+resized_images_path = ""
+
+def Resize(imagename):
+    imagename = imagename.rsplit('.', 1)[0]
     resized_images_path = "resized_image_folders/" + imagename
     os.makedirs(resized_images_path)
+    createiPhoneIcons(imagename, resized_images_path)
+    createiPadIcons(imagename, resized_images_path)
+    createCarPlayIcons(imagename, resized_images_path)
+    createAppleWatchIcons(imagename, resized_images_path)
 
-def createiPhoneIcons(name):
+def createiPhoneIcons(name, path):
     sizes = [kiPhoneSettingsIcon2x, 
              kiPhoneSettingsIcon3x,
              kiPhoneSpotlightIcon2x,
              kiPhoneSpotlightIcon3x,
              kiPhoneAppIcon2x,
              kiPhoneAppIcon3x]
+    img = Image.open("uploaded_images/" + name + ".png")
+    for size in sizes:
+        sizeTuple = (size, size)
+        img = img.resize(sizeTuple, Image.BILINEAR)
+        saveName = addSizeSuffix("iphone", size)
+        img.save(path + "/" + saveName + ".png", "PNG")
+    img.close()
+
   
-def createiPadIcons(name):
+def createiPadIcons(name, path):
+    sizes = [kiPadSettingsIcon1x,
+             kiPadSettingsIcon2x,
+             kiPadSpotlightIcon1x,
+             kiPadSpotlightIcon2x,
+             kiPadAppIcon1x,
+             kiPadAppIcon2x]
+    img = Image.open("uploaded_images/" + name + ".png")
+    for size in sizes:
+        sizeTuple = (size, size)
+        img = img.resize(sizeTuple, Image.BILINEAR)
+        saveName = addSizeSuffix("ipad", size)
+        img.save(path + "/" + saveName + ".png", "PNG")
+    img.close()
+
+def createCarPlayIcons(name, path):
+    sizes = [kCarPlayIcon1x]
+    img = Image.open("uploaded_images/" + name + ".png")
+    for size in sizes:
+        sizeTuple = (size, size)
+        img = img.resize(sizeTuple, Image.BILINEAR)
+        saveName = addSizeSuffix("carplay", size)
+        img.save(path + "/" + saveName + ".png", "PNG")
+    img.close()
   
-def createCarPlayIcons(name):
-  
-def createAppleWatchIcons(name):
+def createAppleWatchIcons(name, path):
+    sizes = [kAppleWatchNotificationCenterIcon38mm,
+             kAppleWatchNotificationCenterIcon48mm,
+             kAppleWatchCompanionSettingsIcon2x,
+             kAppleWatchCompanionSettingsIcon3x,
+             kAppleWatchHomeScreenIcon2x,
+             kAppleWatchLongLookIcon42mm,
+             kAppleWatchShortLookIcon38mm,
+             kAppleWatchShortLookIcon42mm]
+    img = Image.open("uploaded_images/" + name + ".png")
+    for size in sizes:
+        sizeTuple = (size, size)
+        img = img.resize(sizeTuple, Image.BILINEAR)
+        saveName = addSizeSuffix("applewatch", size)
+        img.save(path + "/" + saveName + ".png", "PNG")
+    img.close()
+
+def addSizeSuffix(filename, size):
+    suffix = "_" + str(size)
+    return filename + suffix
