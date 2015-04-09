@@ -66,24 +66,42 @@ def dirEntries(dir_name, subdir, *args):
 def completed(filename):
     print(app.root_path)
     try:
-        tempImg = PIL.Image.open(os.path.join(app.root_path, 'uploaded_images/', filename))
-        width, height = tempImg.size
-        if width != 1024 or  height != 1024:
-            os.remove(os.path.join(app.root_path, 'uploaded_images/', filename))
-            tempImg.close()
-            return render_template('invalid_size.html', height=height, width=width)
-        Resize(filename)
-        CreateJSON(filename)
-        to_dir = app.root_path + 'pre_zip_folders/' + filenameNoExt + '/AppIcon.appiconset/'
-        from_dir = app.root_path + 'resized_image_folders/' + filenameNoExt + '/'
-        source = os.listdir(from_dir)
-        for img in source:
-            img = from_dir + img
-            shutil.copy(img, to_dir)
-        makeArchive(dirEntries(app.root_path + 'pre_zip_folders/' + filenameNoExt + '/', True), filenameNoExt + '.zip', 'pre_zip_folders/')
-        shutil.rmtree(app.root_path + 'pre_zip_folders/' + filenameNoExt)
-        shutil.rmtree(app.root_path + 'resized_image_folders/' + filenameNoExt)
-        os.remove(app.root_path + 'uploaded_images/' + filename)
+        try:
+            tempImg = PIL.Image.open(os.path.join(app.root_path, 'uploaded_images/', filename))
+            width, height = tempImg.size
+            if width != 1024 or  height != 1024:
+                os.remove(os.path.join(app.root_path, 'uploaded_images/', filename))
+                tempImg.close()
+                return render_template('invalid_size.html', height=height, width=width)
+        except:
+            print("Could not check size of image, ", "I guess.", file=sys.stderr)
+        try:
+            Resize(filename)
+        except:
+            print("Could not: ", "Resize images.", file=sys.stderr)
+        try:
+            CreateJSON(filename)
+        except:
+            print("Could not: ", "Create JSON for images.", file=sys.stderr)
+        try:
+            to_dir = app.root_path + 'pre_zip_folders/' + filenameNoExt + '/AppIcon.appiconset/'
+            from_dir = app.root_path + 'resized_image_folders/' + filenameNoExt + '/'
+            source = os.listdir(from_dir)
+            for img in source:
+                img = from_dir + img
+                shutil.copy(img, to_dir)
+        except:
+            print("Could not: ", "Move images to pre_zip.", file=sys.stderr)
+        try:
+            makeArchive(dirEntries(app.root_path + 'pre_zip_folders/' + filenameNoExt + '/', True), filenameNoExt + '.zip', 'pre_zip_folders/')
+        except:
+            print("Could not: ", "Make archive of images.", file=sys.stderr)
+        try:
+            shutil.rmtree(app.root_path + 'pre_zip_folders/' + filenameNoExt)
+            shutil.rmtree(app.root_path + 'resized_image_folders/' + filenameNoExt)
+            os.remove(app.root_path + 'uploaded_images/' + filename)
+        except:
+            print("Could not: ", "Cleanup image folders.", file=sys.stderr)
     except:
         print("Creating archive didn't work, ", "and I don't know why.", file=sys.stderr)
     if os.path.isfile('completed_zips/' + filename + '.zip'):
@@ -93,7 +111,11 @@ def completed(filename):
 
 @app.route('/download/<filename>')
 def download(filename):
-    return send_from_directory('completed_zips/', filename)
+    try:
+        return send_from_directory('completed_zips/', filename)
+    except:
+        print("Could not: ", "Get URL for completed ZIP.", file=sys.stderr)
+        return return render_template('notavailable.html', filename=filename)
 
 if __name__ == "__main__":
     app.debug = True
