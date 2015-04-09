@@ -21,16 +21,20 @@ def upload():
     file = request.files['file']
     if file and allowed_file(file.filename):
         filename = addTimeSuffix(secure_filename(file.filename))
+        filenameNoExt = filename.rsplit('.', 1)[0]
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         Resize(filename)
         CreateJSON(filename)
-        to_dir = 'pre_zip_folders/' + filename.rsplit('.', 1)[0] + '/AppIcon.appiconset/'
-        from_dir = 'resized_image_folders/' + filename.rsplit('.', 1)[0] + '/'
+        to_dir = 'pre_zip_folders/' + filenameNoExt + '/AppIcon.appiconset/'
+        from_dir = 'resized_image_folders/' + filenameNoExt + '/'
         source = os.listdir(from_dir)
         for img in source:
             img = from_dir + img
             shutil.copy(img, to_dir)
-        makeArchive(dirEntries('pre_zip_folders/' + filename.rsplit('.', 1)[0] + '/', True), filename.rsplit('.', 1)[0] + '.zip', 'pre_zip_folders/')
+        makeArchive(dirEntries('pre_zip_folders/' + filenameNoExt + '/', True), filenameNoExt + '.zip', 'pre_zip_folders/')
+        shutil.rmtree('pre_zip_folders/' + filenameNoExt)
+        shutil.rmtree('resized_image_folders/' + filenameNoExt)
+        os.remove('uploaded_images/' + filename)
         return render_template('uploaded.html', filename=filename)
     else:
         return render_template('invalid_extension.html')
