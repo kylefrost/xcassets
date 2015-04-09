@@ -1,4 +1,4 @@
-import os, time, PIL, shutil
+import os, time, PIL, shutil, zipfile
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug import secure_filename
 from icon_resize import Resize
@@ -24,7 +24,13 @@ def upload():
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         Resize(filename)
         CreateJSON(filename)
-        #shutil.move('resized_image_folders/' + filename.rsplit('.', 1)[0] + '/', 'pre_zip_folders/' + 'AppIcon.appiconset/' + filename.rsplit('.', 1)[0])
+        to_dir = 'pre_zip_folders/' + filename.rsplit('.', 1)[0] + '/AppIcon.appiconset/'
+        from_dir = 'resized_image_folders/' + filename.rsplit('.', 1)[0] + '/'
+        source = os.listdir(from_dir)
+        for img in source:
+            img = from_dir + img
+            shutil.copy(img, to_dir)
+        makeArchive(dirEntries('pre_zip_folders/' + filename.rsplit('.', 1)[0] + '/', True), filename.rsplit('.', 1)[0] + '.zip', 'pre_zip_folders/')
         return render_template('uploaded.html', filename=filename)
     else:
         return render_template('invalid_extension.html')
@@ -33,6 +39,31 @@ def addTimeSuffix(filename):
     nameList = filename.rsplit('.', 1)
     suffix = "_" + time.strftime('%Y%m%d%H%M%S')
     return nameList[0] + suffix + "." + nameList[1]
+
+def makeArchive(fileList, archive, root):
+    a = zipfile.ZipFile('completed_zips/' + archive, 'w', zipfile.ZIP_DEFLATED)
+
+    for f in fileList:
+        print "archiving file %s" % (f)
+        a.write(f, os.path.relpath(f, root))
+    a.close()
+
+
+def dirEntries(dir_name, subdir, *args):
+    fileList = []
+    for file in os.listdir(dir_name):
+        dirfile = os.path.join(dir_name, file)
+        if os.path.isfile(dirfile):
+            if not args:
+                fileList.append(dirfile)
+            else:
+                if os.path.splitext(dirfile)[1][1:] in args:
+                    fileList.append(dirfile)
+            # recursively access file names in subdirectories
+        elif os.path.isdir(dirfile) and subdir:
+            print "Accessing directory:", dirfile
+            fileList.extend(dirEntries(dirfile, subdir, *args))
+    return fileList
 
 @app.route('/download/<filename>')
 def download():

@@ -1,4 +1,5 @@
 import os, json
+from flask import jsonify
 
 # iPhone
 kiPhoneSettingsIcon2x = 58
@@ -33,49 +34,48 @@ def CreateJSON(imagename):
     imagename = imagename.rsplit('.', 1)[0]
     pre_zip_path = "pre_zip_folders/" + imagename + "/AppIcon.appiconset/"
     os.makedirs(pre_zip_path)
-    #iphone_json = json.loads(createiPhoneJSON())
-    iphone_json = json.loads("{ \"size\" : \"29x29\", \"idiom\" : \"iphone\", \"filename\" : \"iphone_58.png\", \"scale\" : \"2x\" },{ \"size\" : \"29x29\", \"idiom\" : \"iphone\", \"filename\" : \"iphone_87.png\", \"scale\" : \"3x\" }")
-    #ipad_json = json.loads(createiPadJSON())
-    #carplay_json = json.loads(createCarPlayJSON())
-    #applewatch_json = json.loads(createAppleWatchJSON())
-    total_json = {"images":[iphone_json], "info": { "version" : 1, "author" : "xcode" } }
+    device_json = createiPhoneJSON()
+    device_json.extend(createiPadJSON())
+    device_json.extend(createCarPlayJSON())
+    device_json.extend(createAppleWatchJSON())
+    total_json = {"images":device_json, "info": { "version" : 1, "author" : "xcode" } }
     with open(pre_zip_path + '/Contents.json', 'w+') as jsondump:
         jsondump.write(json.dumps(total_json, indent=2))
 
 
 def createiPhoneJSON():
-    json_string1 = "{ \"size\" : \"29x29\", \"idiom\" : \"iphone\", \"filename\" : \"iphone_58.png\", \"scale\" : \"2x\" },"
-    json_string2 = "{ \"size\" : \"29x29\", \"idiom\" : \"iphone\", \"filename\" : \"iphone_87.png\", \"scale\" : \"3x\" },"
-    json_string3 = "{ \"size\" : \"40x40\", \"idiom\" : \"iphone\", \"filename\" : \"iphone_80.png\", \"scale\" : \"2x\" },"
-    json_string4 = "{ \"size\" : \"40x40\", \"idiom\" : \"iphone\", \"filename\" : \"iphone_120.png\", \"scale\" : \"3x\" },"
-    json_string5 = "{ \"size\" : \"60x60\", \"idiom\" : \"iphone\", \"filename\" : \"iphone_120.png\", \"scale\" : \"2x\" },"
-    json_string6 = "{ \"size\" : \"60x60\", \"idiom\" : \"iphone\", \"filename\" : \"iphone_180.png\", \"scale\" : \"3x\" }"
-    return json_string
+    json_list = [{ "size" : "29x29", "idiom" : "iphone", "filename" : "iphone_58.png", "scale" : "2x" },
+                 { "size" : "29x29", "idiom" : "iphone", "filename" : "iphone_87.png", "scale" : "3x" },
+                 { "size" : "40x40", "idiom" : "iphone", "filename" : "iphone_80.png", "scale" : "2x" },
+                 { "size" : "40x40", "idiom" : "iphone", "filename" : "iphone_120.png", "scale" : "3x" },
+                 { "size" : "60x60", "idiom" : "iphone", "filename" : "iphone_120.png", "scale" : "2x" },
+                 { "size" : "60x60", "idiom" : "iphone", "filename" : "iphone_180.png", "scale" : "3x" }]
+    return json_list
     
 
-def createiPadJSON(name):
-    json_string = "{ \"size\" : \"29x29\", \"idiom\" : \"ipad\", \"filename\" : \"ipad_29.png\", \"scale\" : \"1x\" },"
-    json_string = json_string + "{ \"size\" : \"29x29\", \"idiom\" : \"ipad\", \"filename\" : \"ipad_58.png\", \"scale\" : \"2x\" },"
-    json_string = json_string + "{ \"size\" : \"40x40\", \"idiom\" : \"ipad\", \"filename\" : \"ipad_40.png\", \"scale\" : \"1x\" },"
-    json_string = json_string + "{ \"size\" : \"40x40\", \"idiom\" : \"ipad\", \"filename\" : \"ipad_80.png\", \"scale\" : \"2x\" },"
-    json_string = json_string + "{ \"size\" : \"76x76\", \"idiom\" : \"ipad\", \"filename\" : \"ipad_76.png\", \"scale\" : \"1x\" },"
-    json_string = json_string + "{ \"size\" : \"76x76\", \"idiom\" : \"ipad\", \"filename\" : \"ipad_152.png\", \"scale\" : \"2x\" }"
-    return json_string
+def createiPadJSON():
+    json_list = [{ "size" : "29x29", "idiom" : "ipad", "filename" : "ipad_29.png", "scale" : "1x" },
+                 { "size" : "29x29", "idiom" : "ipad", "filename" : "ipad_58.png", "scale" : "2x" },
+                 { "size" : "40x40", "idiom" : "ipad", "filename" : "ipad_40.png", "scale" : "1x" },
+                 { "size" : "40x40", "idiom" : "ipad", "filename" : "ipad_80.png", "scale" : "2x" },
+                 { "size" : "76x76", "idiom" : "ipad", "filename" : "ipad_76.png", "scale" : "1x" },
+                 { "size" : "76x76", "idiom" : "ipad", "filename" : "ipad_152.png", "scale" : "2x" }]
+    return json_list
 
-def createCarPlayJSON(name):
-    json_string = "{ \"size\" : \"120x120\", \"idiom\" : \"car\", \"filename\" : \"carplay_120.png\", \"scale\" : \"1x\" }"
-    return json_string
+def createCarPlayJSON():
+    json_list = [{ "size" : "120x120", "idiom" : "car", "filename" : "carplay_120.png", "scale" : "1x" }]
+    return json_list
 
-def createAppleWatchJSON(name):
-    json_string = "{ \"size\" : \"24x24\", \"idiom\" : \"watch\", \"scale\" : \"2x\", \"filename\" : \"applewatch_48.png\", \"role\" : \"notificationCenter\", \"subtype\" : \"38mm\" },"
-    json_string = json_string + "{ \"size\" : \"27.5x27.5\", \"idiom\" : \"watch\", \"scale\" : \"2x\", \"filename\" : \"applewatch_55.png\", \"role\" : \"notificationCenter\", \"subtype\" : \"42mm\" },"
-    json_string = json_string + "{ \"size\" : \"29x29\", \"idiom\" : \"watch\", \"filename\" : \"applewatch_58.png\", \"role\" : \"companionSettings\", \"scale\" : \"2x\" },"
-    json_string = json_string + "{ \"size\" : \"29x29\", \"idiom\" : \"watch\", \"filename\" : \"applewatch_87.png\", \"role\" : \"companionSettings\", \"scale\" : \"3x\" },"
-    json_string = json_string + "{ \"size\" : \"40x40\", \"idiom\" : \"watch\", \"scale\" : \"2x\", \"filename\" : \"applewatch_80.png\", \"role\" : \"appLauncher\", \"subtype\" : \"38mm\" },"
-    json_string = json_string + "{ \"size\" : \"44x44\", \"idiom\" : \"watch\", \"scale\" : \"2x\", \"filename\" : \"applewatch_88.png\", \"role\" : \"longLook\", \"subtype\" : \"42mm\" },"
-    json_string = json_string + "{ \"size\" : \"86x86\", \"idiom\" : \"watch\", \"scale\" : \"2x\", \"filename\" : \"applewatch_172.png\", \"role\" : \"quickLook\", \"subtype\" : \"38mm\" },"
-    json_string = json_string + "{ \"size\" : \"98x98\", \"idiom\" : \"watch\", \"scale\" : \"2x\", \"filename\" : \"applewatch_196.png\", \"role\" : \"quickLook\", \"subtype\" : \"42mm\" }"
-    return json_string
+def createAppleWatchJSON():
+    json_list = [{ "size" : "24x24", "idiom" : "watch", "scale" : "2x", "filename" : "applewatch_48.png", "role" : "notificationCenter", "subtype" : "38mm" },
+                 { "size" : "27.5x27.5", "idiom" : "watch", "scale" : "2x", "filename" : "applewatch_55.png", "role" : "notificationCenter", "subtype" : "42mm" },
+                 { "size" : "29x29", "idiom" : "watch", "filename" : "applewatch_58.png", "role" : "companionSettings", "scale" : "2x" },
+                 { "size" : "29x29", "idiom" : "watch", "filename" : "applewatch_87.png", "role" : "companionSettings", "scale" : "3x" },
+                 { "size" : "40x40", "idiom" : "watch", "scale" : "2x", "filename" : "applewatch_80.png", "role" : "appLauncher", "subtype" : "38mm" },
+                 { "size" : "44x44", "idiom" : "watch", "scale" : "2x", "filename" : "applewatch_88.png", "role" : "longLook", "subtype" : "42mm" },
+                 { "size" : "86x86", "idiom" : "watch", "scale" : "2x", "filename" : "applewatch_172.png", "role" : "quickLook", "subtype" : "38mm" },
+                 { "size" : "98x98", "idiom" : "watch", "scale" : "2x", "filename" : "applewatch_196.png", "role" : "quickLook", "subtype" : "42mm" }]
+    return json_list
 
 
 
