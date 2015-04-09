@@ -44,32 +44,32 @@ def Resize(imagename):
     createAppleWatchIcons(imagename, resized_images_path)
 
 def createiPhoneIcons(name, path):
-    sizes = [kiPhoneSettingsIcon2x, 
+    sizes = reversed([kiPhoneSettingsIcon2x, 
              kiPhoneSettingsIcon3x,
              kiPhoneSpotlightIcon2x,
              kiPhoneSpotlightIcon3x,
              kiPhoneAppIcon2x,
-             kiPhoneAppIcon3x]
+             kiPhoneAppIcon3x])
     img = Image.open("uploaded_images/" + name + ".png")
     for size in sizes:
         sizeTuple = (size, size)
-        img = img.resize(sizeTuple, Image.BILINEAR)
+        img = img.resize(sizeTuple, Image.ANTIALIAS)
         saveName = addSizeSuffix("iphone", size)
         img.save(path + "/" + saveName + ".png", "PNG")
     img.close()
 
   
 def createiPadIcons(name, path):
-    sizes = [kiPadSettingsIcon1x,
+    sizes = reversed([kiPadSettingsIcon1x,
              kiPadSettingsIcon2x,
              kiPadSpotlightIcon1x,
              kiPadSpotlightIcon2x,
              kiPadAppIcon1x,
-             kiPadAppIcon2x]
+             kiPadAppIcon2x])
     img = Image.open("uploaded_images/" + name + ".png")
     for size in sizes:
         sizeTuple = (size, size)
-        img = img.resize(sizeTuple, Image.BILINEAR)
+        img = img.resize(sizeTuple, Image.ANTIALIAS)
         saveName = addSizeSuffix("ipad", size)
         img.save(path + "/" + saveName + ".png", "PNG")
     img.close()
@@ -79,24 +79,24 @@ def createCarPlayIcons(name, path):
     img = Image.open("uploaded_images/" + name + ".png")
     for size in sizes:
         sizeTuple = (size, size)
-        img = img.resize(sizeTuple, Image.BILINEAR)
+        img = img.resize(sizeTuple, Image.ANTIALIAS)
         saveName = addSizeSuffix("carplay", size)
         img.save(path + "/" + saveName + ".png", "PNG")
     img.close()
   
 def createAppleWatchIcons(name, path):
-    sizes = [kAppleWatchNotificationCenterIcon38mm,
+    sizes = reversed([kAppleWatchNotificationCenterIcon38mm,
              kAppleWatchNotificationCenterIcon48mm,
              kAppleWatchCompanionSettingsIcon2x,
              kAppleWatchCompanionSettingsIcon3x,
              kAppleWatchHomeScreenIcon2x,
              kAppleWatchLongLookIcon42mm,
              kAppleWatchShortLookIcon38mm,
-             kAppleWatchShortLookIcon42mm]
+             kAppleWatchShortLookIcon42mm])
     img = Image.open("uploaded_images/" + name + ".png")
     for size in sizes:
         sizeTuple = (size, size)
-        img = img.resize(sizeTuple, Image.BILINEAR)
+        img = img.resize(sizeTuple, Image.ANTIALIAS)
         saveName = addSizeSuffix("applewatch", size)
         img.save(path + "/" + saveName + ".png", "PNG")
     img.close()

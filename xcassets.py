@@ -20,13 +20,14 @@ def index():
 def upload():
     file = request.files['file']
     if file and allowed_file(file.filename):
-        tempImg = PIL.Image.open(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        width, height = tempImg.size
-        if width != 1024 or  height != 1024:
-            return render_template('invalid_size.html', height=height, width=width)
         filename = addTimeSuffix(secure_filename(file.filename))
         filenameNoExt = filename.rsplit('.', 1)[0]
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        tempImg = PIL.Image.open(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        width, height = tempImg.size
+        if width != 1024 or  height != 1024:
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return render_template('invalid_size.html', height=height, width=width)
         tempImg.close()
         Resize(filename)
         CreateJSON(filename)
