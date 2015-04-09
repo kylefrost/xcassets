@@ -77,7 +77,11 @@ def dirEntries(dir_name, subdir, *args):
 
 @app.route('/completed/<filename>')
 def completed(filename):
-    return render_template('download.html', filename=filename)
+    print filename
+    if os.path.isfile('completed_zips/' + filename + '.zip'):
+        return render_template('download.html', filename=filename)
+    else:
+        return render_template('notavailable.html', filename=filename)
 
 @app.route('/download/<filename>')
 def download(filename):

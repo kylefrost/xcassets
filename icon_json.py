@@ -76,12 +76,3 @@ def createAppleWatchJSON():
                  { "size" : "86x86", "idiom" : "watch", "scale" : "2x", "filename" : "applewatch_172.png", "role" : "quickLook", "subtype" : "38mm" },
                  { "size" : "98x98", "idiom" : "watch", "scale" : "2x", "filename" : "applewatch_196.png", "role" : "quickLook", "subtype" : "42mm" }]
     return json_list
-
-
-
-
-
-
-
-
-
