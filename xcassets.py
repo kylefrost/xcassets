@@ -5,12 +5,11 @@ from icon_resize import Resize
 from icon_json import CreateJSON
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploaded_images/'
 app.config['ALLOWED_EXTENSIONS'] = set(['png'])
 
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
+           filename.rsplit('.', 1)[1] in ['png']
 
 @app.route('/')
 def index():
@@ -18,30 +17,38 @@ def index():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    file = request.files['file']
+    try:
+        file = request.files['file']
+    except:
+        print "Unexpected error:", sys.exc_info()[0]
+        raise
     if file and allowed_file(file.filename):
-        filename = addTimeSuffix(secure_filename(file.filename))
-        filenameNoExt = filename.rsplit('.', 1)[0]
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        tempImg = PIL.Image.open(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        width, height = tempImg.size
-        if width != 1024 or  height != 1024:
-            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return render_template('invalid_size.html', height=height, width=width)
-        tempImg.close()
-        Resize(filename)
-        CreateJSON(filename)
-        to_dir = 'pre_zip_folders/' + filenameNoExt + '/AppIcon.appiconset/'
-        from_dir = 'resized_image_folders/' + filenameNoExt + '/'
-        source = os.listdir(from_dir)
-        for img in source:
-            img = from_dir + img
-            shutil.copy(img, to_dir)
-        makeArchive(dirEntries('pre_zip_folders/' + filenameNoExt + '/', True), filenameNoExt + '.zip', 'pre_zip_folders/')
-        shutil.rmtree('pre_zip_folders/' + filenameNoExt)
-        shutil.rmtree('resized_image_folders/' + filenameNoExt)
-        os.remove('uploaded_images/' + filename)
-        return redirect(url_for('completed', filename=filenameNoExt))
+        try:
+            filename = addTimeSuffix(secure_filename(file.filename))
+            filenameNoExt = filename.rsplit('.', 1)[0]
+            file.save(os.path.join(app.root_path, 'uploaded_images/', filename))
+            tempImg = PIL.Image.open(os.path.join(app.root_path, 'uploaded_images/', filename))
+            width, height = tempImg.size
+            if width != 1024 or  height != 1024:
+                os.remove(os.path.join(app.root_path, 'uploaded_images/', filename))
+                return render_template('invalid_size.html', height=height, width=width)
+            tempImg.close()
+            Resize(filename)
+            CreateJSON(filename)
+            to_dir = app.root_path + 'pre_zip_folders/' + filenameNoExt + '/AppIcon.appiconset/'
+            from_dir = app.root_path + 'resized_image_folders/' + filenameNoExt + '/'
+            source = os.listdir(from_dir)
+            for img in source:
+                img = from_dir + img
+                shutil.copy(img, to_dir)
+            makeArchive(dirEntries(app.root_path + 'pre_zip_folders/' + filenameNoExt + '/', True), filenameNoExt + '.zip', 'pre_zip_folders/')
+            shutil.rmtree(app.root_path + 'pre_zip_folders/' + filenameNoExt)
+            shutil.rmtree(app.root_path + 'resized_image_folders/' + filenameNoExt)
+            os.remove(app.root_path + 'uploaded_images/' + filename)
+            return redirect(url_for('completed', filename=filenameNoExt))
+        except:
+            print "Unexpected error:", sys.exc_info()[0]
+            raise
     else:
         return render_template('invalid_extension.html', extension=file.filename.rsplit('.', 1)[1])
 
@@ -90,3 +97,4 @@ def download(filename):
 if __name__ == "__main__":
     app.debug = True
     app.run(host='0.0.0.0')
+    app.port = 80

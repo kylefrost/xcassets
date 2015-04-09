@@ -36,7 +36,7 @@ resized_images_path = ""
 
 def Resize(imagename):
     imagename = imagename.rsplit('.', 1)[0]
-    resized_images_path = "resized_image_folders/" + imagename
+    resized_images_path = os.path.join(app.root_path, "resized_image_folders/" + imagename)
     os.makedirs(resized_images_path)
     createiPhoneIcons(imagename, resized_images_path)
     createiPadIcons(imagename, resized_images_path)
@@ -50,7 +50,7 @@ def createiPhoneIcons(name, path):
              kiPhoneSpotlightIcon3x,
              kiPhoneAppIcon2x,
              kiPhoneAppIcon3x])
-    img = Image.open("uploaded_images/" + name + ".png")
+    img = Image.open(os.path.join(app.root_path, "uploaded_images/" + name + ".png"))
     for size in sizes:
         sizeTuple = (size, size)
         img = img.resize(sizeTuple, Image.ANTIALIAS)
@@ -66,7 +66,7 @@ def createiPadIcons(name, path):
              kiPadSpotlightIcon2x,
              kiPadAppIcon1x,
              kiPadAppIcon2x])
-    img = Image.open("uploaded_images/" + name + ".png")
+    img = Image.open(os.path.join(app.root_path, "uploaded_images/" + name + ".png"))
     for size in sizes:
         sizeTuple = (size, size)
         img = img.resize(sizeTuple, Image.ANTIALIAS)
@@ -76,7 +76,7 @@ def createiPadIcons(name, path):
 
 def createCarPlayIcons(name, path):
     sizes = [kCarPlayIcon1x]
-    img = Image.open("uploaded_images/" + name + ".png")
+    img = Image.open(os.path.join(app.root_path, "uploaded_images/" + name + ".png"))
     for size in sizes:
         sizeTuple = (size, size)
         img = img.resize(sizeTuple, Image.ANTIALIAS)
@@ -93,7 +93,7 @@ def createAppleWatchIcons(name, path):
              kAppleWatchLongLookIcon42mm,
              kAppleWatchShortLookIcon38mm,
              kAppleWatchShortLookIcon42mm])
-    img = Image.open("uploaded_images/" + name + ".png")
+    img = Image.open(os.path.join(app.root_path, "uploaded_images/" + name + ".png"))
     for size in sizes:
         sizeTuple = (size, size)
         img = img.resize(sizeTuple, Image.ANTIALIAS)
