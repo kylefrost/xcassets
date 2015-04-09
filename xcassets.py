@@ -35,7 +35,7 @@ def upload():
         shutil.rmtree('pre_zip_folders/' + filenameNoExt)
         shutil.rmtree('resized_image_folders/' + filenameNoExt)
         os.remove('uploaded_images/' + filename)
-        return render_template('uploaded.html', filename=filename)
+        return redirect(url_for('completed', filename=filenameNoExt))
     else:
         return render_template('invalid_extension.html')
 
@@ -69,9 +69,13 @@ def dirEntries(dir_name, subdir, *args):
             fileList.extend(dirEntries(dirfile, subdir, *args))
     return fileList
 
+@app.route('/completed/<filename>')
+def completed(filename):
+    return render_template('download.html', filename=filename)
+
 @app.route('/download/<filename>')
-def download():
-    return
+def download(filename):
+    return send_from_directory('completed_zips/', filename)
 
 if __name__ == "__main__":
     app.debug = True
