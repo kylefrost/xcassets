@@ -27,24 +27,6 @@ def upload():
             filename = addTimeSuffix(secure_filename(file.filename))
             filenameNoExt = filename.rsplit('.', 1)[0]
             file.save(os.path.join(app.root_path, 'uploaded_images/', filename))
-            tempImg = PIL.Image.open(os.path.join(app.root_path, 'uploaded_images/', filename))
-            width, height = tempImg.size
-            if width != 1024 or  height != 1024:
-                os.remove(os.path.join(app.root_path, 'uploaded_images/', filename))
-                return render_template('invalid_size.html', height=height, width=width)
-            tempImg.close()
-            Resize(filename)
-            CreateJSON(filename)
-            to_dir = app.root_path + 'pre_zip_folders/' + filenameNoExt + '/AppIcon.appiconset/'
-            from_dir = app.root_path + 'resized_image_folders/' + filenameNoExt + '/'
-            source = os.listdir(from_dir)
-            for img in source:
-                img = from_dir + img
-                shutil.copy(img, to_dir)
-            makeArchive(dirEntries(app.root_path + 'pre_zip_folders/' + filenameNoExt + '/', True), filenameNoExt + '.zip', 'pre_zip_folders/')
-            shutil.rmtree(app.root_path + 'pre_zip_folders/' + filenameNoExt)
-            shutil.rmtree(app.root_path + 'resized_image_folders/' + filenameNoExt)
-            os.remove(app.root_path + 'uploaded_images/' + filename)
             return redirect(url_for('completed', filename=filenameNoExt))
         except:
             print "Unexpected error:", sys.exc_info()[0]
@@ -85,6 +67,27 @@ def dirEntries(dir_name, subdir, *args):
 @app.route('/completed/<filename>')
 def completed(filename):
     print filename
+    try:
+        tempImg = PIL.Image.open(os.path.join(app.root_path, 'uploaded_images/', filename))
+        width, height = tempImg.size
+        if width != 1024 or  height != 1024:
+            os.remove(os.path.join(app.root_path, 'uploaded_images/', filename))
+            tempImg.close()
+            return render_template('invalid_size.html', height=height, width=width)
+        Resize(filename)
+        CreateJSON(filename)
+        to_dir = app.root_path + 'pre_zip_folders/' + filenameNoExt + '/AppIcon.appiconset/'
+        from_dir = app.root_path + 'resized_image_folders/' + filenameNoExt + '/'
+        source = os.listdir(from_dir)
+        for img in source:
+            img = from_dir + img
+            shutil.copy(img, to_dir)
+        makeArchive(dirEntries(app.root_path + 'pre_zip_folders/' + filenameNoExt + '/', True), filenameNoExt + '.zip', 'pre_zip_folders/')
+        shutil.rmtree(app.root_path + 'pre_zip_folders/' + filenameNoExt)
+        shutil.rmtree(app.root_path + 'resized_image_folders/' + filenameNoExt)
+        os.remove(app.root_path + 'uploaded_images/' + filename)
+    except:
+        print "Creating archive didn't work."
     if os.path.isfile('completed_zips/' + filename + '.zip'):
         return render_template('download.html', filename=filename)
     else:
