@@ -1,11 +1,11 @@
-import os, time, PIL, shutil, zipfile
+from __future__ import print_function
+import os, time, PIL, shutil, zipfile, sys
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug import secure_filename
 from icon_resize import Resize
 from icon_json import CreateJSON
 
 app = Flask(__name__)
-app.config['ALLOWED_EXTENSIONS'] = set(['png'])
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -20,7 +20,7 @@ def upload():
     try:
         file = request.files['file']
     except:
-        print "Unexpected error:", sys.exc_info()[0]
+        print("Unexpected error:", sys.exc_info()[0], file=sys.stderr)
         raise
     if file and allowed_file(file.filename):
         try:
@@ -29,7 +29,7 @@ def upload():
             file.save(os.path.join(app.root_path, 'uploaded_images/', filename))
             return redirect(url_for('completed', filename=filenameNoExt))
         except:
-            print "Unexpected error:", sys.exc_info()[0]
+            print("Unexpected error:", sys.exc_info()[0], file=sys.std.err)
             raise
     else:
         return render_template('invalid_extension.html', extension=file.filename.rsplit('.', 1)[1])
@@ -43,7 +43,6 @@ def makeArchive(fileList, archive, root):
     a = zipfile.ZipFile('completed_zips/' + archive, 'w', zipfile.ZIP_DEFLATED)
 
     for f in fileList:
-        print "archiving file %s" % (f)
         a.write(f, os.path.relpath(f, root))
     a.close()
 
@@ -60,13 +59,12 @@ def dirEntries(dir_name, subdir, *args):
                     fileList.append(dirfile)
             # recursively access file names in subdirectories
         elif os.path.isdir(dirfile) and subdir:
-            print "Accessing directory:", dirfile
             fileList.extend(dirEntries(dirfile, subdir, *args))
     return fileList
 
 @app.route('/completed/<filename>')
 def completed(filename):
-    print filename
+    print(app.root_path)
     try:
         tempImg = PIL.Image.open(os.path.join(app.root_path, 'uploaded_images/', filename))
         width, height = tempImg.size
@@ -87,7 +85,7 @@ def completed(filename):
         shutil.rmtree(app.root_path + 'resized_image_folders/' + filenameNoExt)
         os.remove(app.root_path + 'uploaded_images/' + filename)
     except:
-        print "Creating archive didn't work."
+        print("Creating archive didn't work, ", "and I don't know why.", file=sys.stderr)
     if os.path.isfile('completed_zips/' + filename + '.zip'):
         return render_template('download.html', filename=filename)
     else:
