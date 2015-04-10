@@ -27,6 +27,7 @@ def upload():
             filename = addTimeSuffix(secure_filename(file.filename))
             filenameNoExt = filename.rsplit('.', 1)[0]
             file.save(os.path.join(app.root_path, 'uploaded_images/', filename))
+            print(os.path.join(app.root_path, "uploaded_images/", filename))
             return redirect(url_for('completed', filename=filenameNoExt))
         except:
             print("Unexpected error:", sys.exc_info()[0], file=sys.std.err)
