@@ -1,4 +1,5 @@
-import os, time
+from __future__ import print_function
+import os, time, sys
 from PIL import Image
 
 # Set Constants for icon sizes
@@ -36,27 +37,27 @@ resized_images_path = ""
 
 def Resize(imagename):
     resized_images_path = os.path.join(app.root_path, "resized_image_folders/" + imagename)
-    print "Should be full path to resized images: " + resized_images_path
+    print("Full path: ", "resized_images_path: " + resized_images_path, file=sys.stderr)
     try:
         os.makedirs(resized_images_path)
     except:
-        "Could not: Create resized_images_path directory."
+        print("Could not: ", "Create resized_images_path/<filename> directory.", file=sys.stderr)
     try:
         createiPhoneIcons(imagename, resized_images_path)
     except:
-        "Could not: Create iPhone icons."
+        print("Could not: ", "Create iPhone icons.", file=sys.stderr)
     try:
         createiPadIcons(imagename, resized_images_path)
     except:
-        "Could not: Create iPad icons."
+        print("Could not: ", "Create iPad icons.", file=sys.stderr)
     try:
         createCarPlayIcons(imagename, resized_images_path)
     except:
-        "Could not: Create CarPlay icons."
+        print("Could not: ", "Create CarPlay icons.", file=sys.stderr)
     try:
         createAppleWatchIcons(imagename, resized_images_path)
     except:
-        "Could not: Create Apple Watch icons."
+        print("Could not: ", "Create Apple Watch icons.", file=sys.stderr)
 
 def createiPhoneIcons(name, path):
     sizes = reversed([kiPhoneSettingsIcon2x, 
