@@ -1,9 +1,10 @@
 from __future__ import print_function
-import os, time, PIL, shutil, zipfile, sys
+import os, time, shutil, zipfile, sys
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug import secure_filename
 from icon_resize import Resize
 from icon_json import CreateJSON
+from PIL import Image
 
 app = Flask(__name__)
 
@@ -68,7 +69,10 @@ def completed(filename):
     print(app.root_path)
     try:
         try:
-            tempImg = PIL.Image.open(os.path.join(app.root_path, 'uploaded_images/', filename))
+            try:
+                tempImg = Image.open(os.path.join(app.root_path, 'uploaded_images/', filename))
+            except:
+                print("Could not: ", "Open file: " + os.path.join(app.root_path, 'uploaded_images/', filename) + " tempImg.", file=sys.stderr)
             width, height = tempImg.size
             if width != 1024 or  height != 1024:
                 os.remove(os.path.join(app.root_path, 'uploaded_images/', filename))
