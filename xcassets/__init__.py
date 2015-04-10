@@ -42,7 +42,7 @@ def addTimeSuffix(filename):
     return nameList[0] + suffix + "." + nameList[1]
 
 def makeArchive(fileList, archive, root):
-    a = zipfile.ZipFile(config.APP_ROOT_DIR + 'completed_zips/' + archive, 'w', zipfile.ZIP_DEFLATED)
+    a = zipfile.ZipFile(os.path.join(config.APP_ROOT_DIR, 'completed_zips/', archive), 'w', zipfile.ZIP_DEFLATED)
 
     for f in fileList:
         a.write(f, os.path.relpath(f, root))
@@ -97,7 +97,7 @@ def completed(filename):
         except:
             print("Could not: ", "Move images to pre_zip.", file=sys.stderr)
         try:
-            makeArchive(dirEntries(config.APP_ROOT_DIR + "pre_zip_folders/" + filename + "/", True), filename + ".zip", "pre_zip_folders/")
+            makeArchive(dirEntries(os.path.join(config.APP_ROOT_DIR, "pre_zip_folders/", filename + "/"), True), filename + ".zip", os.path.join(config.APP_ROOT_DIR, "pre_zip_folders/"))
         except:
             print("Could not: ", "Make archive of images.", file=sys.stderr)
         try:
