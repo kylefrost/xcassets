@@ -97,13 +97,13 @@ def completed(filename):
         except:
             print("Could not: ", "Move images to pre_zip.", file=sys.stderr)
         try:
-            makeArchive(dirEntries(app.root_path + 'pre_zip_folders/' + filenameNoExt + '/', True), filenameNoExt + '.zip', 'pre_zip_folders/')
+            makeArchive(dirEntries(config.APP_ROOT_DIR + "pre_zip_folders/" + filename + "/", True), filename + ".zip", "pre_zip_folders/")
         except:
             print("Could not: ", "Make archive of images.", file=sys.stderr)
         try:
-            shutil.rmtree(app.root_path + 'pre_zip_folders/' + filenameNoExt)
-            shutil.rmtree(app.root_path + 'resized_image_folders/' + filenameNoExt)
-            os.remove(app.root_path + 'uploaded_images/' + filename)
+            shutil.rmtree(config.APP_ROOT_DIR + "pre_zip_folders/" + filename)
+            shutil.rmtree(config.APP_ROOT_DIR + "resized_image_folders/" + filename)
+            os.remove(config.APP_ROOT_DIR + "uploaded_images/" + filename)
         except:
             print("Could not: ", "Cleanup image folders.", file=sys.stderr)
     except:
