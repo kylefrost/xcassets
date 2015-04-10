@@ -1,4 +1,4 @@
-import os, json
+import os, json, config
 from flask import jsonify
 
 # iPhone

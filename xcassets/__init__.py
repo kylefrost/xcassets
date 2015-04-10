@@ -88,8 +88,8 @@ def completed(filename):
         except:
             print("Could not: ", "Create JSON for file: " + filename, file=sys.stderr)
         try:
-            to_dir = app.root_path + 'pre_zip_folders/' + filenameNoExt + '/AppIcon.appiconset/'
-            from_dir = app.root_path + 'resized_image_folders/' + filenameNoExt + '/'
+            to_dir = os.path.join(app.root_path, 'pre_zip_folders/', filenameNoExt, '/AppIcon.appiconset/')
+            from_dir = os.path.join(app.root_path, 'resized_image_folders/', filenameNoExt, '/')
             source = os.listdir(from_dir)
             for img in source:
                 img = from_dir + img
