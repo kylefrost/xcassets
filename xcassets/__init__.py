@@ -66,7 +66,6 @@ def dirEntries(dir_name, subdir, *args):
 
 @app.route('/completed/<filename>')
 def completed(filename):
-    print(app.root_path)
     try:
         try:
             try:
@@ -84,7 +83,10 @@ def completed(filename):
             Resize(filename + ".png")
         except:
             print("Could not: ", "Resize image with name: " + filename, file=sys.stderr)
-        CreateJSON(filename)
+        try:
+            CreateJSON(filename)
+        except:
+            print("Could not: ", "Create JSON for file: " + filename, file=sys.stderr)
         try:
             to_dir = app.root_path + 'pre_zip_folders/' + filenameNoExt + '/AppIcon.appiconset/'
             from_dir = app.root_path + 'resized_image_folders/' + filenameNoExt + '/'
