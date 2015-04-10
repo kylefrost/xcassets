@@ -37,7 +37,6 @@ resized_images_path = ""
 def Resize(imagename):
     imagename = imagename.rsplit('.', 1)[0]
     resized_images_path = os.path.join(config.APP_ROOT_DIR, "resized_image_folders/", imagename)
-    os.makedirs(resized_images_path)
     try:
         os.makedirs(resized_images_path)
     except:
