@@ -81,7 +81,7 @@ def completed(filename):
         except:
             print("Could not check size of image, ", "I guess.", file=sys.stderr)
         try:
-            Resize(filename)
+            Resize(filename + ".png")
         except:
             print("Could not: ", "Resize image with name: " + filename, file=sys.stderr)
         CreateJSON(filename)
