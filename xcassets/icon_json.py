@@ -38,7 +38,7 @@ def CreateJSON(imagename):
     device_json.extend(createCarPlayJSON())
     device_json.extend(createAppleWatchJSON())
     total_json = {"images":device_json, "info": { "version" : 1, "author" : "xcode" } }
-    with open(pre_zip_path + '/Contents.json', 'w+') as jsondump:
+    with open(os.path.join(pre_zip_path, "Contents.json"), 'w+') as jsondump:
         jsondump.write(json.dumps(total_json, indent=2))
 
 
