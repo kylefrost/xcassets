@@ -75,7 +75,7 @@ def completed(filename):
                 print("Could not: ", "Open file: " + os.path.join(app.root_path, 'uploaded_images/', filename + '.png') + " as tempImg.", file=sys.stderr)
             width, height = tempImg.size
             if width != 1024 or  height != 1024:
-                os.remove(os.path.join(app.root_path, 'uploaded_images/', filename))
+                os.remove(os.path.join(app.root_path, 'uploaded_images/', filename + ".png"))
                 tempImg.close()
                 return render_template('invalid_size.html', height=height, width=width)
         except:
