@@ -21,7 +21,7 @@ def upload():
     try:
         file = request.files['file']
     except:
-        print("Unexpected error:", sys.exc_info()[0], file=sys.stderr)
+        print("Unexpected error: ", sys.exc_info()[0], file=sys.stderr)
         raise
     if file and allowed_file(file.filename):
         try:
@@ -42,7 +42,7 @@ def addTimeSuffix(filename):
     return nameList[0] + suffix + "." + nameList[1]
 
 def makeArchive(fileList, archive, root):
-    a = zipfile.ZipFile('completed_zips/' + archive, 'w', zipfile.ZIP_DEFLATED)
+    a = zipfile.ZipFile(config.APP_ROOT_DIR + 'completed_zips/' + archive, 'w', zipfile.ZIP_DEFLATED)
 
     for f in fileList:
         a.write(f, os.path.relpath(f, root))
