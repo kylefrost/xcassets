@@ -70,9 +70,9 @@ def completed(filename):
     try:
         try:
             try:
-                tempImg = Image.open(os.path.join(app.root_path, 'uploaded_images/', filename))
+                tempImg = Image.open(os.path.join(app.root_path, 'uploaded_images/', filename + '.png'))
             except:
-                print("Could not: ", "Open file: " + os.path.join(app.root_path, 'uploaded_images/', filename) + " tempImg.", file=sys.stderr)
+                print("Could not: ", "Open file: " + os.path.join(app.root_path, 'uploaded_images/', filename + '.png') + " as tempImg.", file=sys.stderr)
             width, height = tempImg.size
             if width != 1024 or  height != 1024:
                 os.remove(os.path.join(app.root_path, 'uploaded_images/', filename))
