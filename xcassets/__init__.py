@@ -1,5 +1,5 @@
 from __future__ import print_function
-import os, time, shutil, zipfile, sys
+import os, time, shutil, zipfile, sys, config
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug import secure_filename
 from icon_resize import Resize
@@ -88,8 +88,8 @@ def completed(filename):
         except:
             print("Could not: ", "Create JSON for file: " + filename, file=sys.stderr)
         try:
-            to_dir = os.path.join(app.root_path, 'pre_zip_folders/', filenameNoExt, '/AppIcon.appiconset/')
-            from_dir = os.path.join(app.root_path, 'resized_image_folders/', filenameNoExt, '/')
+            to_dir = os.path.join(config.APP_ROOT_DIR, "pre_zip_folders/", filename, "AppIcon.appiconset/")
+            from_dir = os.path.join(config.APP_ROOT_DIR, "resized_image_folders/", filename + "/")
             source = os.listdir(from_dir)
             for img in source:
                 img = from_dir + img
