@@ -31,6 +31,7 @@ kAppleWatchShortLookIcon38mm = 172
 kAppleWatchShortLookIcon42mm = 196
 
 def CreateJSON(imagename):
+    imagename = imagename.rsplit('.', 1)[0]
     pre_zip_path = os.path.join(config.APP_ROOT_DIR, "pre_zip_folders/", imagename, "AppIcon.appiconset/")
     os.makedirs(pre_zip_path)
     device_json = createiPhoneJSON()
