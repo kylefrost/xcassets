@@ -35,9 +35,18 @@ kAppleWatchShortLookIcon42mm = 196
 resized_images_path = ""
 
 def Resize(imagename):
-    imagename = imagename.rsplit('.', 1)[0]
+    print "imagname: " + imagename
+    print "imagename.rsplit('.', 1)[0]: " + imagename.rsplit('.', 1)[0]
+    try:
+        imagename = imagename.rsplit('.', 1)[0]
+    except:
+        print "Could not: Split imagename."
     resized_images_path = os.path.join(app.root_path, "resized_image_folders/" + imagename)
-    os.makedirs(resized_images_path)
+    print "Should be full path to resized images: " + resized_images_path
+    try:
+        os.makedirs(resized_images_path)
+    except:
+        "Could not: Create resized_images_path directory."
     createiPhoneIcons(imagename, resized_images_path)
     createiPadIcons(imagename, resized_images_path)
     createCarPlayIcons(imagename, resized_images_path)
