@@ -35,10 +35,11 @@ kAppleWatchShortLookIcon42mm = 196
 resized_images_path = ""
 
 def Resize(imagename):
-    resized_images_path = os.path.join(app.root_path, "resized_image_folders/" + imagename)
-    print "Full path: " + resized_images_path
+    imagename = imagename.rsplit('.', 1)[0]
+    resized_images_path = os.path.join(app.root_path, "resized_image_folders/", imagename)
+    os.makedirs(resized_images_path)
     try:
-        os.mkdir(resized_images_path)
+        os.makedirs(resized_images_path)
     except:
         print "Could not: " + "Create resized_images_path/<filename> directory."
     try:
@@ -65,12 +66,12 @@ def createiPhoneIcons(name, path):
              kiPhoneSpotlightIcon3x,
              kiPhoneAppIcon2x,
              kiPhoneAppIcon3x])
-    img = Image.open(os.path.join(app.root_path, "uploaded_images/" + name + ".png"))
+    img = Image.open(os.path.join(app.root_path, "uploaded_images/", name + ".png"))
     for size in sizes:
         sizeTuple = (size, size)
         img = img.resize(sizeTuple, Image.ANTIALIAS)
         saveName = addSizeSuffix("iphone", size)
-        img.save(path + "/" + saveName + ".png", "PNG")
+        img.save(os.path.join(app.root_path, "resized_image_folders/", name, saveName + ".png"), "PNG")
     img.close()
 
   
@@ -81,22 +82,22 @@ def createiPadIcons(name, path):
              kiPadSpotlightIcon2x,
              kiPadAppIcon1x,
              kiPadAppIcon2x])
-    img = Image.open(os.path.join(app.root_path, "uploaded_images/" + name + ".png"))
+    img = Image.open(os.path.join(app.root_path, "uploaded_images/", name + ".png"))
     for size in sizes:
         sizeTuple = (size, size)
         img = img.resize(sizeTuple, Image.ANTIALIAS)
         saveName = addSizeSuffix("ipad", size)
-        img.save(path + "/" + saveName + ".png", "PNG")
+        img.save(os.path.join(app.root_path, "resized_image_folders/", name, saveName + ".png"), "PNG")
     img.close()
 
 def createCarPlayIcons(name, path):
     sizes = [kCarPlayIcon1x]
-    img = Image.open(os.path.join(app.root_path, "uploaded_images/" + name + ".png"))
+    img = Image.open(os.path.join(app.root_path, "uploaded_images/", name + ".png"))
     for size in sizes:
         sizeTuple = (size, size)
         img = img.resize(sizeTuple, Image.ANTIALIAS)
         saveName = addSizeSuffix("carplay", size)
-        img.save(path + "/" + saveName + ".png", "PNG")
+        img.save(os.path.join(app.root_path, "resized_image_folders/", name, saveName + ".png"), "PNG")
     img.close()
   
 def createAppleWatchIcons(name, path):
@@ -108,12 +109,12 @@ def createAppleWatchIcons(name, path):
              kAppleWatchLongLookIcon42mm,
              kAppleWatchShortLookIcon38mm,
              kAppleWatchShortLookIcon42mm])
-    img = Image.open(os.path.join(app.root_path, "uploaded_images/" + name + ".png"))
+    img = Image.open(os.path.join(app.root_path, "uploaded_images/", name + ".png"))
     for size in sizes:
         sizeTuple = (size, size)
         img = img.resize(sizeTuple, Image.ANTIALIAS)
         saveName = addSizeSuffix("applewatch", size)
-        img.save(path + "/" + saveName + ".png", "PNG")
+        img.save(os.path.join(app.root_path, "resized_image_folders/", name, saveName + ".png"), "PNG")
     img.close()
 
 def addSizeSuffix(filename, size):
