@@ -80,14 +80,8 @@ def completed(filename):
                 return render_template('invalid_size.html', height=height, width=width)
         except:
             print("Could not check size of image, ", "I guess.", file=sys.stderr)
-        try:
-            Resize(filename)
-        except:
-            print("Could not: ", "Resize images.", file=sys.stderr)
-        try:
-            CreateJSON(filename)
-        except:
-            print("Could not: ", "Create JSON for images.", file=sys.stderr)
+        Resize(filename)
+        CreateJSON(filename)
         try:
             to_dir = app.root_path + 'pre_zip_folders/' + filenameNoExt + '/AppIcon.appiconset/'
             from_dir = app.root_path + 'resized_image_folders/' + filenameNoExt + '/'
