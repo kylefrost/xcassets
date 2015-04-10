@@ -115,7 +115,7 @@ def download(filename):
         return send_from_directory('completed_zips/', filename)
     except:
         print("Could not: ", "Get URL for completed ZIP.", file=sys.stderr)
-        return return render_template('notavailable.html', filename=filename)
+        return render_template('notavailable.html', filename=filename)
 
 if __name__ == "__main__":
     app.debug = True
