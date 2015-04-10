@@ -101,9 +101,9 @@ def completed(filename):
         except:
             print("Could not: ", "Make archive of images.", file=sys.stderr)
         try:
-            shutil.rmtree(config.APP_ROOT_DIR + "pre_zip_folders/" + filename)
-            shutil.rmtree(config.APP_ROOT_DIR + "resized_image_folders/" + filename)
-            os.remove(config.APP_ROOT_DIR + "uploaded_images/" + filename)
+            shutil.rmtree(os.path.join(config.APP_ROOT_DIR, "pre_zip_folders/", filename))
+            shutil.rmtree(os.path.join(config.APP_ROOT_DIR, "resized_image_folders/", filename))
+            os.remove(os.path.join(config.APP_ROOT_DIR, "uploaded_images/", filename))
         except:
             print("Could not: ", "Cleanup image folders.", file=sys.stderr)
     except:
