@@ -5,7 +5,7 @@ docutils==0.8.1
 enum34==1.0.4
 Flask==0.10.1
 itsdangerous==0.24
-Jinja2==2.7.3
+Jinja2==2.11.3
 lxml==2.3.2
 MarkupSafe==0.23
 mcpi==0.1.1
