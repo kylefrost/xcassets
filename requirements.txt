@@ -21,7 +21,7 @@ psutil==2.2.1
 pyasn1==0.1.7
 pycparser==2.10
 pygame===1.9.1release
-Pygments==1.5
+Pygments==2.7.4
 pygobject==3.8.2
 pyOpenSSL==0.14
 pyserial==2.5
