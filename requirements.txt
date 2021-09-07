@@ -16,7 +16,7 @@ picamera==1.9
 pifacecommon==4.1.2
 pifacedigitalio==3.0.4
 PIL==1.1.7
-Pillow==2.8.1
+Pillow==8.3.2
 psutil==2.2.1
 pyasn1==0.1.7
 pycparser==2.10
